@@ -167,15 +167,22 @@ def DetectCutPoints(Word, MTI, MFV):
 
     End = Start = -1
     Regions = []
-    for i in range(len(Word[MTI])):
-        if Flag == 0 and Word[MTI][i] != 0:
-            End = i
-            Flag = 1
-
-        elif Flag == 1 and Word[MTI][i] == 0:
+    IsStart = False
+    for i in range(len(Word[MTI]) - 2, 0, -1):
+        if Word[MTI][i] == 0 and Word[MTI][i+1] != 0:
             Start = i
-            Mid = (End + Start) // 2
+            IsStart = True
+        if Word[MTI][i] != 0 and Word[MTI][i+1] == 0 and IsStart:
 
+            End = i
+            Mid = (End + Start) // 2
+            IsStart = False
+        #if Flag == 0 and Word[MTI][i] != 0:
+        #    End = i
+        #    Flag = 1
+        #elif Flag == 1 and Word[MTI][i] == 0:
+        #    Start = i
+        #    Mid = (End + Start) // 2
             Cut = -1
             for j in range(End, Start + 1):
                 if np.sum(Word[:, j]) == 0:
