@@ -2,16 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3e850e78-b9d4-4de8-a9e5-39810b04df69" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Word.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/..gitignore.swp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/OCR-Arabic.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/OCR-Arabic.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Segmentation.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Line.py" beforeDir="false" afterPath="$PROJECT_DIR$/Line.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Word.py" beforeDir="false" afterPath="$PROJECT_DIR$/Word.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/res1.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/res2.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/word1.jpg" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,6 +33,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunManager">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
@@ -92,6 +89,14 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
+    <state x="590" y="215" width="800" height="684" key="#Notifications" timestamp="1575874970433">
+      <screen x="70" y="27" width="1850" height="1053" />
+    </state>
+    <state x="590" y="215" width="800" height="684" key="#Notifications/70.27.1850.1053@70.27.1850.1053" timestamp="1575874970433" />
+    <state x="453" y="211" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1575874320084">
+      <screen x="70" y="27" width="1850" height="1053" />
+    </state>
+    <state x="453" y="211" key="#com.intellij.execution.impl.EditConfigurationsDialog/70.27.1850.1053@70.27.1850.1053" timestamp="1575874320084" />
     <state x="560" y="150" width="859" height="814" key="CommitChangelistDialog2" timestamp="1575535565862">
       <screen x="70" y="27" width="1850" height="1053" />
     </state>
@@ -100,42 +105,46 @@
       <screen x="70" y="27" width="1850" height="1053" />
     </state>
     <state width="1237" height="466" key="DebuggerActiveHint/70.27.1850.1053@70.27.1850.1053" timestamp="1575721130780" />
-    <state width="1827" height="275" key="GridCell.Tab.0.bottom" timestamp="1575733353487">
+    <state width="1827" height="340" key="GridCell.Tab.0.bottom" timestamp="1575875706558">
       <screen x="70" y="27" width="1850" height="1053" />
     </state>
-    <state width="1827" height="275" key="GridCell.Tab.0.bottom/70.27.1850.1053@70.27.1850.1053" timestamp="1575733353487" />
-    <state width="1827" height="275" key="GridCell.Tab.0.center" timestamp="1575733353485">
+    <state width="1827" height="340" key="GridCell.Tab.0.bottom/70.27.1850.1053@70.27.1850.1053" timestamp="1575875706558" />
+    <state width="1827" height="340" key="GridCell.Tab.0.center" timestamp="1575875706557">
       <screen x="70" y="27" width="1850" height="1053" />
     </state>
-    <state width="1827" height="275" key="GridCell.Tab.0.center/70.27.1850.1053@70.27.1850.1053" timestamp="1575733353485" />
-    <state width="1827" height="275" key="GridCell.Tab.0.left" timestamp="1575733353485">
+    <state width="1827" height="340" key="GridCell.Tab.0.center/70.27.1850.1053@70.27.1850.1053" timestamp="1575875706557" />
+    <state width="1827" height="340" key="GridCell.Tab.0.left" timestamp="1575875706556">
       <screen x="70" y="27" width="1850" height="1053" />
     </state>
-    <state width="1827" height="275" key="GridCell.Tab.0.left/70.27.1850.1053@70.27.1850.1053" timestamp="1575733353485" />
-    <state width="1827" height="275" key="GridCell.Tab.0.right" timestamp="1575733353486">
+    <state width="1827" height="340" key="GridCell.Tab.0.left/70.27.1850.1053@70.27.1850.1053" timestamp="1575875706556" />
+    <state width="1827" height="340" key="GridCell.Tab.0.right" timestamp="1575875706557">
       <screen x="70" y="27" width="1850" height="1053" />
     </state>
-    <state width="1827" height="275" key="GridCell.Tab.0.right/70.27.1850.1053@70.27.1850.1053" timestamp="1575733353486" />
-    <state width="1827" height="340" key="GridCell.Tab.1.bottom" timestamp="1575733211218">
+    <state width="1827" height="340" key="GridCell.Tab.0.right/70.27.1850.1053@70.27.1850.1053" timestamp="1575875706557" />
+    <state width="1827" height="340" key="GridCell.Tab.1.bottom" timestamp="1575875689739">
       <screen x="70" y="27" width="1850" height="1053" />
     </state>
-    <state width="1827" height="340" key="GridCell.Tab.1.bottom/70.27.1850.1053@70.27.1850.1053" timestamp="1575733211218" />
-    <state width="1827" height="340" key="GridCell.Tab.1.center" timestamp="1575733211216">
+    <state width="1827" height="340" key="GridCell.Tab.1.bottom/70.27.1850.1053@70.27.1850.1053" timestamp="1575875689739" />
+    <state width="1827" height="340" key="GridCell.Tab.1.center" timestamp="1575875689739">
       <screen x="70" y="27" width="1850" height="1053" />
     </state>
-    <state width="1827" height="340" key="GridCell.Tab.1.center/70.27.1850.1053@70.27.1850.1053" timestamp="1575733211216" />
-    <state width="1827" height="340" key="GridCell.Tab.1.left" timestamp="1575733211216">
+    <state width="1827" height="340" key="GridCell.Tab.1.center/70.27.1850.1053@70.27.1850.1053" timestamp="1575875689739" />
+    <state width="1827" height="340" key="GridCell.Tab.1.left" timestamp="1575875689739">
       <screen x="70" y="27" width="1850" height="1053" />
     </state>
-    <state width="1827" height="340" key="GridCell.Tab.1.left/70.27.1850.1053@70.27.1850.1053" timestamp="1575733211216" />
-    <state width="1827" height="340" key="GridCell.Tab.1.right" timestamp="1575733211217">
+    <state width="1827" height="340" key="GridCell.Tab.1.left/70.27.1850.1053@70.27.1850.1053" timestamp="1575875689739" />
+    <state width="1827" height="340" key="GridCell.Tab.1.right" timestamp="1575875689739">
       <screen x="70" y="27" width="1850" height="1053" />
     </state>
-    <state width="1827" height="340" key="GridCell.Tab.1.right/70.27.1850.1053@70.27.1850.1053" timestamp="1575733211217" />
-    <state x="651" y="381" key="com.intellij.ide.util.TipDialog" timestamp="1575692442482">
+    <state width="1827" height="340" key="GridCell.Tab.1.right/70.27.1850.1053@70.27.1850.1053" timestamp="1575875689739" />
+    <state x="484" y="188" width="1022" height="737" key="SettingsEditor" timestamp="1575875546122">
       <screen x="70" y="27" width="1850" height="1053" />
     </state>
-    <state x="651" y="381" key="com.intellij.ide.util.TipDialog/70.27.1850.1053@70.27.1850.1053" timestamp="1575692442482" />
+    <state x="484" y="188" width="1022" height="737" key="SettingsEditor/70.27.1850.1053@70.27.1850.1053" timestamp="1575875546122" />
+    <state x="651" y="381" key="com.intellij.ide.util.TipDialog" timestamp="1575875369785">
+      <screen x="70" y="27" width="1850" height="1053" />
+    </state>
+    <state x="651" y="381" key="com.intellij.ide.util.TipDialog/70.27.1850.1053@70.27.1850.1053" timestamp="1575875369785" />
     <state x="658" y="259" width="672" height="678" key="search.everywhere.popup" timestamp="1575728113623">
       <screen x="70" y="27" width="1850" height="1053" />
     </state>
@@ -146,12 +155,12 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Word.py</url>
-          <line>116</line>
+          <line>20</line>
           <option name="timeStamp" value="100" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Word.py</url>
-          <line>131</line>
+          <line>132</line>
           <option name="timeStamp" value="103" />
         </line-breakpoint>
       </breakpoints>

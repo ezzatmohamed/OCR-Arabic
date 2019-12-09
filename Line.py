@@ -25,8 +25,10 @@ class Line:
         IQR = 2
 
         # Filtering Depending On IQR ( Interquartile Range ) Value
-        self.G = self.G[self.L >= IQR]
-        self.L = self.L[self.L >= IQR]
+        # G => Gaps
+        # L => Length of The Gap
+        self.G = self.G[self.L >= IQR] # Removing Gaps Which its length < IQR
+        self.L = self.L[self.L >= IQR] # Removing Gaps' Lengths
 
         Mean = np.mean(self.L)
         self.G = self.G[self.L >= Mean]
@@ -84,7 +86,7 @@ class Line:
             if Trans > MaxVal:
                 MaxVal = Trans
                 self.MTI = i
-
+        self.MTI = self.MTI
         #MTIidx = []
 
     def DetectBaseline(self):
@@ -100,7 +102,7 @@ class Line:
             if HP[i] > HP[BaseIndex]:
                 BaseIndex = i
 
-        self.Baseline = BaseIndex
+        self.Baseline = BaseIndex +1
 
     def GetMFV(self):
         return self.MFV
@@ -118,5 +120,4 @@ class Line:
         return self.Baseline
     def GetBinaryL(self):
         return self.L_Binary
-
 

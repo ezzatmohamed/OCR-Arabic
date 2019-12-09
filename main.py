@@ -3,6 +3,7 @@ import cv2
 import os
 from Line import *
 from Word import *
+import shutil
 
 import math
 import matplotlib.pyplot as plt
@@ -83,12 +84,15 @@ for idx in range( len(Lines)) :
     MTI = L.GetMTI()
 
     Name = "Line_" + str(idx)
-    os.mkdir(Name)
-    cv2.imwrite(Name+'/'+Name+'.jpg', L.GetBinaryL())
+    os.mkdir('test/'+Name)
+    cv2.imwrite('test/'+Name+'/'+Name+'.jpg', L.GetBinaryL())
 
     for i in range(len(Words)):
+        if i == 11:
+            print(1)
         W = Word(Words[i],WordsRGB[i] ,MTI, MFV, BaseIndex)
         W.DetectCutPoints()
+        W.FilterStroke()
         Cuts = W.GetCuts()
 
         #W.Display()
@@ -98,7 +102,7 @@ for idx in range( len(Lines)) :
 
 
 
-        cv2.imwrite(Name+'/word'+str(i)+'.jpg', WordsRGB[i])
+        cv2.imwrite('test/'+Name+'/word'+str(i)+'.jpg', WordsRGB[i])
 
 
     # Cuts = Test(Words[0],BaseIndex,MFV)
