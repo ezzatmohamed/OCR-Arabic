@@ -22,47 +22,19 @@ class Word:
     def IsHole(self, Start, End, Cut):
 
         a = self.Word[:, End:Start + 1].copy()
-
         MaxVal = 0
-        for i in range(Cut, Cut + 1):
-            Trans = 0
-            for j in range(1, self.BaseIndex + 3):
+        Trans = 0
+        for j in range(1, len(a)):
+            if self.Word[j][Cut] != self.Word[j - 1][Cut]:
+                Trans += 1
 
-                if self.Word[j][i] != self.Word[j - 1][i]:
-                    Trans += 1
-
-            if Trans > MaxVal:
-                MaxVal = Trans
+        if Trans > MaxVal:
+            MaxVal = Trans
 
         Threshold = 2
-
-        # CheckDots
-        HP = np.sum(a, axis=1)
-
-        # cv2.imshow('Test Image', a)
-        # cv2.waitKey(0)
-        # cv2.destroyAllWindows()
-
-        H_Trans = 0
-        Flag = 0
-        count = 0
-        for i in range(1, self.BaseIndex):
-            if Flag == 0 and HP[i] != 0:
-                H_Trans += 1
-                Flag = 1
-
-            elif Flag == 1 and HP[i] == 0:
-                H_Trans += 1
-                Flag = 0
-                count = 0
-
-        if H_Trans > 1:
-            Threshold = 4
-
-        if MaxVal > Threshold:
+        if MaxVal >Threshold:
             return True
-        else:
-            return False
+        return False
 
     def IsPath(self, Start, End):
         a = self.Word[:, End:Start + 1].copy()
@@ -114,20 +86,72 @@ class Word:
 
         return True
 
+
     def IsStroke(self, Start, End):
 
         a = self.Word[:, End:Start + 1].copy()
         HP = np.sum(a, axis=1)
         HP1 = np.sum(HP[0:self.BaseIndex])
         HP2 = np.sum(HP[self.BaseIndex + 1:])
+        HP3 = HP[self.BaseIndex-1] / 255
+        # Stroke => HP above baseline is greater than HP below the baseline
+
+        Trans = 0
+        idx = (Start + End) // 2
+        for j in range(1, self.BaseIndex):
+            if self.Word[j][idx] != self.Word[j - 1][idx]:
+                Trans += 1
+
+        if Trans > 2:
+            return False
+
         if HP1 < HP2:
             return False
-        height = 0
+
+        # Stroke => It has a connected line in the baseline
+        ratio = HP3 / (Start - End)
+        if ratio < 0.3:
+            return False
+
+        WordHP = np.sum(self.Word,axis=1)
+        for i in range( len(WordHP) ):
+            if WordHP[i] != 0:
+                height = self.BaseIndex - i
+                break
+#        height = self.MTI-1
+#        height = self.BaseIndex - height
+
         for i in range(len(HP)):
             if HP[i] != 0:
-                height = i - self.BaseIndex
-                break
-        np.max()
+                if self.BaseIndex - i >= height :
+                    return False
+
+        return True
+
+        #np.max()
+
+    def FilterStroke(self):
+
+        i = 0
+        Length = len(self.Regions)
+        while ( i < Length-3 ):
+            Start = self.Regions[i]
+            End   = self.Regions[i+1]
+            if not self.IsStroke(Start,End):
+                i+=1
+                continue
+            Start = self.Regions[i+1]
+            End   = self.Regions[i+2]
+            if not self.IsStroke(Start,End):
+                i+=1
+                continue
+            Start = self.Regions[i+2]
+            End   = self.Regions[i+3]
+            if self.IsStroke(Start,End):
+                self.Regions.pop(i+1)
+                self.Regions.pop(i+1)
+                Length-=2
+            i+=1
 
     def DetectCutPoints(self):
         # Flag = 0
