@@ -92,21 +92,26 @@ class Word:
         a = self.Word[:, End:Start + 1].copy()
         HP = np.sum(a, axis=1)
         HP1 = np.sum(HP[0:self.BaseIndex])
-        HP2 = np.sum(HP[self.BaseIndex + 1:])
+        HP2 = np.sum(HP[self.BaseIndex:])
         HP3 = HP[self.BaseIndex-1] / 255
         # Stroke => HP above baseline is greater than HP below the baseline
 
         Trans = 0
         idx = (Start + End) // 2
+        flag = 0
         for j in range(1, self.BaseIndex):
-            if self.Word[j][idx] != self.Word[j - 1][idx]:
+            if HP[j] != 0 and flag == 0:
                 Trans += 1
+                flag = 1
+            elif flag == 1 and HP[j] == 0:
+                Trans+=1
+                flag = 0
 
         if Trans > 2:
             return False
 
-        if HP1 < HP2:
-            return False
+#        if HP1 < HP2:
+#            return False
 
         # Stroke => It has a connected line in the baseline
         ratio = HP3 / (Start - End)
@@ -123,8 +128,10 @@ class Word:
 
         for i in range(len(HP)):
             if HP[i] != 0:
-                if self.BaseIndex - i >= height :
+                if self.BaseIndex - i >= height-1:
                     return False
+                else:
+                    return True
 
         return True
 

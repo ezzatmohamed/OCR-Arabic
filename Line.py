@@ -39,9 +39,9 @@ class Line:
         # Vertical Projection Of the text
         VP = np.sum(self.L_Binary, axis=0)
         VP2 = VP[VP != 0].astype(np.int64)
+
         self.MFV = np.bincount(VP2).argmax()
-        # print(VP2)
-        # print(MFV)
+
         flag = 0
         for i in range(len(VP)):
 
