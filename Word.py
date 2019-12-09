@@ -18,6 +18,7 @@ class Word:
         self.MFV = MFV
         self.BaseIndex = BaseIndex
         self.Regions = []
+        self.Holes = []
 
     def IsHole(self, Start, End, Cut):
 
@@ -33,6 +34,7 @@ class Word:
 
         Threshold = 2
         if MaxVal >Threshold:
+            self.Holes.append(Cut)
             return True
         return False
 
@@ -96,22 +98,11 @@ class Word:
         HP3 = HP[self.BaseIndex-1] / 255
         # Stroke => HP above baseline is greater than HP below the baseline
 
-        Trans = 0
-        idx = (Start + End) // 2
-        flag = 0
-        for j in range(1, self.BaseIndex):
-            if HP[j] != 0 and flag == 0:
-                Trans += 1
-                flag = 1
-            elif flag == 1 and HP[j] == 0:
-                Trans+=1
-                flag = 0
-
-        if Trans > 2:
-            return False
-
 #        if HP1 < HP2:
 #            return False
+        for H in self.Holes:
+            if H >= End and H <= Start:
+                return False
 
         # Stroke => It has a connected line in the baseline
         ratio = HP3 / (Start - End)
