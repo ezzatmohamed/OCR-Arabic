@@ -126,7 +126,49 @@ class Word:
 
         return True
 
-        #np.max()
+    def IsStroke2(self, Start, End):
+
+        a = self.Word[:, End:Start + 1].copy()
+        HP = np.sum(a, axis=1)
+        HP1 = np.sum(HP[0:self.BaseIndex])
+        HP2 = np.sum(HP[self.BaseIndex:])
+        HP3 = HP[self.BaseIndex - 1] / 255
+        # Stroke => HP above baseline is greater than HP below the baseline
+
+        #        if HP1 < HP2:
+        #            return False
+        # for H in self.Holes:
+        #     if H >= End and H <= Start:
+        #         return False
+
+        # Stroke => It has a connected line in the baseline
+        ratio = HP3 / (Start - End)
+        if ratio < 0.3:
+            return False
+
+        WordHP = np.sum(self.Word, axis=1)
+        for i in range(len(WordHP)):
+            if WordHP[i] != 0:
+                height = self.BaseIndex - i
+                break
+        #        height = self.MTI-1
+        #        height = self.BaseIndex - height
+
+        Trans = 0
+        Flag = 0
+        for i in range(self.BaseIndex):
+            if Flag == 0 and HP[i] != 0:
+                Trans+=1
+                Flag = 1
+
+            elif Flag == 1 and HP[i] == 0:
+                Trans +=1
+                Flag = 0
+        if Trans < 3 :
+            return False
+
+        return True
+    #np.max()
 
     def FilterStroke(self):
 
@@ -150,6 +192,28 @@ class Word:
                 self.Regions.pop(i+1)
                 Length-=2
             i+=1
+
+        i = 0
+        Length = len(self.Regions)
+        while (i < Length - 3):
+            Start = self.Regions[i]
+            End = self.Regions[i + 1]
+            if not self.IsStroke(Start, End):
+                i += 1
+                continue
+            Start = self.Regions[i + 2]
+            End = self.Regions[i + 3]
+            if not self.IsStroke(Start, End):
+                i += 1
+                continue
+
+            Start = self.Regions[i + 1]
+            End = self.Regions[i + 2]
+            if self.IsStroke2(Start, End):
+                self.Regions.pop(i + 1)
+                self.Regions.pop(i + 1)
+                Length -= 2
+            i += 1
 
     def DetectCutPoints(self):
         # Flag = 0
