@@ -16,6 +16,14 @@ from skimage.morphology import binary_erosion, binary_dilation, binary_closing, 
 # Gaps are whether Gaps between words OR Gaps within sub-word
 # removing sub-word Gaps
 
+Test_Number = 1
+while ( os.path.isdir("tests/test"+str(Test_Number)) ):
+    Test_Number+=1
+
+Path = "tests/test"+str(Test_Number)
+os.mkdir(Path)
+Img = cv2.imread('31.png')
+
 def SegmentLines(Img,ImgRGB):
     HP = np.sum(Img,axis=1)
 
@@ -58,8 +66,6 @@ def ToBinaryImg(Img):
 
     return BinaryImg
 
-WordIdx = 2
-Img = cv2.imread('1.png')
 dim = Img.shape
 BinaryImg = ToBinaryImg(Img)
 Lines, LinesRGB = SegmentLines(BinaryImg,Img)
@@ -69,28 +75,25 @@ for idx in range( len(Lines)) :
     L = Line(Lines[idx],LinesRGB[idx])
     h = Lines[idx].shape[1]
 
-    #cv2.imshow('BaseLine', Lines[idx])
-    #cv2.waitKey(0)
-    #cv2.destroyAllWindows()
-
     L.WordSegment()
-    L.DetectBaseline()
-    L.MaxTrans()
+
 
     Words = L.GetBinWords()
     WordsRGB = L.GetRGBWords()
     MFV   = L.GetMFV()
     BaseIndex = L.GetBaseline()
     MTI = L.GetMTI()
+    Height = L.GetHeight()
 
     Name = "Line_" + str(idx)
-    os.mkdir('test/'+Name)
-    cv2.imwrite('test/'+Name+'/'+Name+'.jpg', L.GetBinaryL())
+
+    os.mkdir(Path+"/"+Name)
+    cv2.imwrite(Path+'/'+Name+'/'+Name+'.jpg', L.GetBinaryL())
 
     for i in range(len(Words)):
-        if i == 11:
+        if i == 2 and idx == 9:
             print(1)
-        W = Word(Words[i],WordsRGB[i] ,MTI, MFV, BaseIndex)
+        W = Word(Words[i],WordsRGB[i] ,MTI, MFV, BaseIndex,Height)
         W.DetectCutPoints()
         W.FilterStroke()
         Cuts = W.GetCuts()
@@ -100,9 +103,11 @@ for idx in range( len(Lines)) :
         for j in range(len(Cuts)):
             WordsRGB[i] = cv2.rectangle(WordsRGB[i], (Cuts[j], 0), (Cuts[j], h), (0, 255, 0), 1)
 
+        WordsRGB[i] = cv2.rectangle(WordsRGB[i], (0, MTI), (dim[0], MTI), (0, 255, 0), 1)
+        WordsRGB[i] = cv2.rectangle(WordsRGB[i], (0, BaseIndex), (WordsRGB[i].shape[1], BaseIndex), (0, 255, 0), 1)
+        WordsRGB[i] = cv2.rectangle(WordsRGB[i], (0, Height), (WordsRGB[i].shape[1], Height), (0, 255, 0), 1)
 
-
-        cv2.imwrite('test/'+Name+'/word'+str(i)+'.jpg', WordsRGB[i])
+        cv2.imwrite(Path+'/'+Name+'/word'+str(i)+'.jpg', WordsRGB[i])
 
 
     # Cuts = Test(Words[0],BaseIndex,MFV)

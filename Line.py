@@ -20,6 +20,21 @@ class Line:
         self.WordsRGB = []
         self.Baseline=0
         self.MTI  =0
+        self.Height = 0
+        self.DetectBaseline()
+        self.MaxTrans()
+        self.CalcHeight()
+
+    def CalcHeight(self):
+        HP = np.sum(self.L_Binary, axis=1)
+        for i in range(len(self.L_Binary)):
+            if HP[i] != 0:
+                if HP[i] > 255*3:
+                    self.Height = i
+                    break
+                else:
+                    self.Height = i+4
+                    break
 
     def FilterGaps(self):
         IQR = 2
@@ -83,9 +98,11 @@ class Line:
             for k in range(1, len(self.L_Binary[i])):
                 if self.L_Binary[i][k] != self.L_Binary[i][k - 1]:
                     Trans += 1
+
             if Trans > MaxVal:
                 MaxVal = Trans
                 self.MTI = i
+
         self.MTI = self.MTI
         #MTIidx = []
 
@@ -95,14 +112,14 @@ class Line:
 
         #HP = ThinnedImg
 
-        HP = np.array(np.sum(ThinnedImg, axis=1))
+        HP = np.sum(ThinnedImg, axis=1)
         # BaseIndex = np.argmax(Baseline)
         BaseIndex = 0
         for i in range(len(HP) - 1, 0, -1):
             if HP[i] > HP[BaseIndex]:
                 BaseIndex = i
 
-        self.Baseline = BaseIndex +1
+        self.Baseline = BaseIndex
 
     def GetMFV(self):
         return self.MFV
@@ -120,4 +137,5 @@ class Line:
         return self.Baseline
     def GetBinaryL(self):
         return self.L_Binary
-
+    def GetHeight(self):
+        return self.Height
