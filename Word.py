@@ -202,10 +202,19 @@ class Word:
     def FilterStroke(self):
 
         #Filter Seeen
-        i = 0
+        i = -1
         Length = len(self.Regions)
         while ( i < Length-3 ):
-            Start = self.Regions[i]
+            if i == -1:
+                VP = np.sum(self.Word,axis=0)
+                for j in range( len(VP),0,-1):
+                    if VP[i] != 0:
+                        Start = self.Regions[i+1]
+                        break
+
+            else:
+                Start = self.Regions[i]
+
             End   = self.Regions[i+1]
             if not self.IsStroke(Start,End):
                 i+=1
