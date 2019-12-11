@@ -34,7 +34,7 @@ class Word:
         a = self.Word[:, End:Start + 1].copy()
         MaxVal = 0
         Trans = 0
-        for j in range(1, len(a)):
+        for j in range(1, self.BaseIndex+1):
             if self.Word[j][Cut] != self.Word[j - 1][Cut]:
                 Trans += 1
 
@@ -80,12 +80,13 @@ class Word:
         if np.sum(self.Word[:, Cut]) == 0:
             return True
 
-        # TODO : Fix Connected-Path Algorithm
-        # elif not self.IsPath(Start, End):
-        #     return True
-
         elif self.IsHole( Start, End, Cut):
             return False
+        # TODO : Fix Connected-Path Algorithm
+        elif not self.IsPath(Start, End):
+            return True
+
+
         else:
             a = self.Word[:, End:Start + 1].copy()
             # cv2.imshow('Test Image', a)
@@ -107,10 +108,10 @@ class Word:
 
     def IsStroke(self, Start, End):
 
-        a = self.Word[:, End:Start + 1].copy()
+        a = self.Word[:, End+1:Start + 1].copy()
         HP = np.sum(a, axis=1)
         HP1 = np.sum(HP[0:self.BaseIndex])
-        HP2 = np.sum(HP[self.BaseIndex+1:])
+        HP2 = np.sum(HP[self.BaseIndex+2:])
         HP3 = HP[self.BaseIndex] / 255
         # Stroke => HP above baseline is greater than HP below the baseline
 
@@ -118,7 +119,7 @@ class Word:
             if H >= End and H <= Start:
                 return False
 
-        if HP2 > 0.5*HP1 :
+        if HP2 !=0 :
             return False
 
         # Stroke => It has a connected line in the baseline
@@ -155,33 +156,26 @@ class Word:
 
         return True
 
-    def IsStroke2(self, Start, End):
-
-        a = self.Word[:, End:Start + 1].copy()
+    def IsStrokeDots(self, Start, End):
+        a = self.Word[:, End+1:Start + 1].copy()
         HP = np.sum(a, axis=1)
         HP1 = np.sum(HP[0:self.BaseIndex])
-        HP2 = np.sum(HP[self.BaseIndex:])
-        HP3 = HP[self.BaseIndex - 1] / 255
+        HP2 = np.sum(HP[self.BaseIndex + 1:])
+        HP3 = HP[self.BaseIndex] / 255
         # Stroke => HP above baseline is greater than HP below the baseline
 
-        #        if HP1 < HP2:
-        #            return False
-        # for H in self.Holes:
-        #     if H >= End and H <= Start:
-        #         return False
+        for H in self.Holes:
+            if H >= End and H <= Start:
+                return False
+
+        if HP2 !=0:
+            return False
 
         # Stroke => It has a connected line in the baseline
         # ratio = HP3 / (Start - End)
         # if ratio < 0.6:
         #     return False
 
-        WordHP = np.sum(self.Word, axis=1)
-        for i in range(len(WordHP)):
-            if WordHP[i] != 0:
-                height = self.BaseIndex - i
-                break
-        #        height = self.MTI-1
-        #        height = self.BaseIndex - height
 
         Trans = 0
         Flag = 0
@@ -207,9 +201,9 @@ class Word:
         while ( i < Length-2 ):
             if i == -1:
                 VP = np.sum(self.Word,axis=0)
-                for j in range( len(VP),0,-1):
-                    if VP[i] != 0:
-                        Start = self.Regions[i+1]
+                for j in range( len(VP)-1,0,-1):
+                    if VP[j] != 0:
+                        Start = j
                         break
 
             else:
@@ -238,30 +232,39 @@ class Word:
             i+=1
 
         # Filtering Sheeen
-        i = 0
-        # Length = len(self.Regions)
-        # while (i < Length - 3):
-        #     Start = self.Regions[i]
-        #     End = self.Regions[i + 1]
-        #     if not self.IsStroke(Start, End):
-        #         i += 1
-        #         continue
-        #     Start = self.Regions[i + 2]
-        #     End = self.Regions[i + 3]
-        #     if not self.IsStroke(Start, End):
-        #         i += 1
-        #         continue
-        #
-        #     Start = self.Regions[i + 1]
-        #     End = self.Regions[i + 2]
-        #     if self.IsStroke2(Start, End):
-        #         VP1 = np.sum(self.Word[:, Start])
-        #         VP2 = np.sum(self.Word[:, End])
-        #         if VP1 != 0 and VP2 != 0:
-        #             self.Regions.pop(i + 1)
-        #             self.Regions.pop(i + 1)
-        #             Length -= 2
-        #     i += 1
+        i = -1
+        Length = len(self.Regions)
+        while (i < Length - 2):
+
+            if i == -1:
+                VP = np.sum(self.Word, axis=0)
+                for j in range(len(VP) - 1, 0, -1):
+                    if VP[j] != 0:
+                        Start = j
+                        break
+            else:
+                Start = self.Regions[i]
+
+            End = self.Regions[i + 1]
+            if not self.IsStroke(Start, End):
+                i += 1
+                continue
+
+            if i != Length-3:
+                Start = self.Regions[i + 2]
+                End = self.Regions[i + 3]
+                if not self.IsStroke(Start, End):
+                    i += 1
+                    continue
+
+            Start = self.Regions[i + 1]
+            End = self.Regions[i + 2]
+            if  self.IsStrokeDots(Start, End):
+                self.Regions.pop(i + 1)
+                self.Regions.pop(i + 1)
+                Length -= 2
+
+            i += 1
 
         i = 0
         Length = len(self.Regions)
