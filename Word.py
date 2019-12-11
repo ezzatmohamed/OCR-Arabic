@@ -118,7 +118,7 @@ class Word:
             if H >= End and H <= Start:
                 return False
 
-        if HP2 != 0 :
+        if HP2 > 0.5*HP1 :
             return False
 
         # Stroke => It has a connected line in the baseline
@@ -204,7 +204,7 @@ class Word:
         #Filter Seeen
         i = -1
         Length = len(self.Regions)
-        while ( i < Length-3 ):
+        while ( i < Length-2 ):
             if i == -1:
                 VP = np.sum(self.Word,axis=0)
                 for j in range( len(VP),0,-1):
@@ -224,12 +224,17 @@ class Word:
             if not self.IsStroke(Start,End):
                 i+=1
                 continue
-            Start = self.Regions[i+2]
-            End   = self.Regions[i+3]
-            if self.IsStroke(Start, End):
+            if i ==  Length-3:
                 self.Regions.pop(i + 1)
                 self.Regions.pop(i + 1)
                 Length -= 2
+            else:
+                Start = self.Regions[i+2]
+                End   = self.Regions[i+3]
+                if self.IsStroke(Start, End):
+                    self.Regions.pop(i + 1)
+                    self.Regions.pop(i + 1)
+                    Length -= 2
             i+=1
 
         # Filtering Sheeen

@@ -91,7 +91,7 @@ for idx in range( len(Lines)) :
     cv2.imwrite(Path+'/'+Name+'/'+Name+'.jpg', L.GetBinaryL())
 
     for i in range(len(Words)):
-        if i == 2 and idx == 9:
+        if i == 6 and idx == 2:
             print(1)
         W = Word(Words[i],WordsRGB[i] ,MTI, MFV, BaseIndex,Height)
         W.DetectCutPoints()
