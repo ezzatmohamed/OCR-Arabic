@@ -191,7 +191,7 @@ class Word:
             return False
 
         return True
-    #np.max()
+
 
     def FilterStroke(self):
 
@@ -270,67 +270,39 @@ class Word:
         Length = len(self.Regions)
         #
         # # Filter ( saad , Daad)
-        # for H in self.Holes:
-        #     i = 0
-        #     while( i < Length-2 ):
-        #         Start = self.Regions[i]
-        #         End = self.Regions[i + 1]
-        #         if ( H > End and H < Start ):
-        #             break
-        #         i+=1
-        #     if i >= Length-2:
-        #         continue
-        #
-        #     Start = self.Regions[i+1]
-        #     End = self.Regions[i+2]
-        #
-        #     a = self.Word[:, End:Start + 1].copy()
-        #     HP = np.sum(a, axis=1)
-        #
-        #     Flag = 0
-        #     Trans = 0
-        #     for k in range(len(a)):
-        #         if Flag == 0 and HP[k] != 0:
-        #             Trans +=1
-        #             Flag = 1
-        #         elif Flag == 1 and HP[k] == 0:
-        #             Trans +1
-        #             Flag = 0
-        #     VP = np.sum(self.Word[:, Start])
-        #     if VP == 0:
-        #         continue
-        #     if Trans < 3 :
-        #         VP = np.sum( self.Word[:,Start]  )
-        #         if VP == 0:
-        #             continue
-        #     else:
-        #         continue
-        #
-        #     if np.sum(HP[self.BaseIndex+1:]) != 0:
-        #         continue
-        #
-        #         Exit = False
-        #
-        #         for k in range(len(HP)):
-        #             if HP[k] != 0:
-        #                 if self.BaseIndex - k >= self.height - 1:
-        #                     Exit = True
-        #                     break
-        #
-        #         if Exit:
-        #             continue
-        #
-        #         Exit = False
-        #         for h in self.Holes:
-        #             if h >= End and h <= Start:
-        #                 Exit = True
-        #                 break
-        #
-        #         if Exit:
-        #             continue
-        #         self.Regions.pop(i+1)
-        #         Length -=1
+        for H in self.Holes:
+            i = 0
+            while( i < Length-2 ):
+                Start = self.Regions[i]
+                End = self.Regions[i + 1]
+                if ( H > End and H < Start ):
+                    break
+                i+=1
+            if i >= Length-2:
+                continue
+            Start = self.Regions[i+1]
+            End = self.Regions[i+2]
+            if self.IsStroke(Start,End):
+                self.Regions.pop(i+1)
+                Length-=1
 
+
+
+        if Length < 1:
+            return
+        LastCut = self.Regions[Length-1]
+        a = self.Word[:,0:LastCut].copy()
+        HP = np.sum(a, axis=1)
+        HP1 = np.sum(HP[0:self.BaseIndex])
+        HP2 = np.sum(HP[self.BaseIndex+1:])
+        for i in range(self.BaseIndex):
+            if HP[i] != 0:
+                H = i
+                break
+
+        # 0.2*HP2 <= HP1
+        if ( (self.BaseIndex- H) < 0.5 * (self.BaseIndex - self.height) ) and 0.7*HP2 <= HP1:
+            self.Regions.pop(Length-1)
 
     def DetectCutPoints(self):
         # Flag = 0
@@ -362,7 +334,6 @@ class Word:
                     if np.sum(self.Word[:, j]) == 0:
                         Cut = j
                         break
-                # VP = np.sum(Word[:,End:Start + 1], axis=0)
 
                 if Cut != -1:
                     Cut = Cut
