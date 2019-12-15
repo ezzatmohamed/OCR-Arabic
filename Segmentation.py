@@ -91,12 +91,12 @@ class Segmentation:
             for i in range(len(Words)):
 
                 # For Debugging
-                if i == 3 and idx == 5:
-
+                if i == 5 and idx == 13:
                     print(1)
                 W = Word(Words[i], WordsRGB[i], MTI, MFV, BaseIndex, Height)
                 W.DetectCutPoints()
                 W.FilterStroke()
+                # W.FilterDal()
                 Cuts = W.GetCuts()
 
                 # W.Display()

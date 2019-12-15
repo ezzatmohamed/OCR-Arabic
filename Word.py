@@ -63,14 +63,14 @@ class Word:
             if Mat[i][0] != 0:
                 IsReachable[i][0] = 1
 
-        for j in range(1, cols):
-            if Mat[0][j] != 0:
-                IsReachable[0][j] = 1
+        # for j in range(1, cols):
+        #     if Mat[0][j] != 0:
+        #         IsReachable[0][j] = 1
 
         for i in range(1, rows):
             for j in range(1, cols):
                 if Mat[i][j] != 0:
-                    IsReachable[i][j] = IsReachable[i - 1][j] or IsReachable[i][j - 1] #or IsReachable[i - 1][j - 1] # or IsReachable[i][j + 1]
+                    IsReachable[i][j] = IsReachable[i - 1][j] or IsReachable[i][j - 1] or IsReachable[i - 1][j - 1] # or IsReachable[i][j + 1]
 
         if np.sum(IsReachable[:, -1]) != 0:
             return True
@@ -84,7 +84,7 @@ class Word:
             return False
         # TODO : Fix Connected-Path Algorithm
         elif not self.IsPath(Start, End):
-            return True
+           return True
 
 
         else:
@@ -97,10 +97,12 @@ class Word:
             HP2 = np.sum(HP[self.BaseIndex+1:])
 
             HP3 = HP[self.BaseIndex] / 255
+            HP4 = HP[self.BaseIndex+1] / 255
             #HP3 += HP[self.BaseIndex-1] / 255
             if Start != End:
                 ratio = HP3 / (Start - End)
-                if HP2 > HP1 and ratio < 0.5:
+                ratio2 = HP4 / (Start - End)
+                if HP2 > HP1 and ratio < 0.5 and ratio2 < 0.5:
                     return False
 
         return True
@@ -108,7 +110,7 @@ class Word:
 
     def IsStroke(self, Start, End):
 
-        a = self.Word[:, End+1:Start + 1].copy()
+        a = self.Word[:, End+1:Start].copy()
         HP = np.sum(a, axis=1)
         HP1 = np.sum(HP[0:self.BaseIndex])
         HP2 = np.sum(HP[self.BaseIndex+2:])
@@ -157,7 +159,7 @@ class Word:
         return True
 
     def IsStrokeDots(self, Start, End):
-        a = self.Word[:, End+1:Start + 1].copy()
+        a = self.Word[:, End+1:Start].copy()
         HP = np.sum(a, axis=1)
         HP1 = np.sum(HP[0:self.BaseIndex])
         HP2 = np.sum(HP[self.BaseIndex + 1:])
@@ -203,7 +205,7 @@ class Word:
                 VP = np.sum(self.Word,axis=0)
                 for j in range( len(VP)-1,0,-1):
                     if VP[j] != 0:
-                        Start = j
+                        Start = j+1
                         break
 
             else:
@@ -246,7 +248,7 @@ class Word:
                 Start = self.Regions[i]
 
             End = self.Regions[i + 1]
-            if not self.IsStroke(Start, End):
+            if not self.IsStroke(Start+1, End):
                 i += 1
                 continue
 
@@ -291,18 +293,24 @@ class Word:
         if Length < 1:
             return
         LastCut = self.Regions[Length-1]
-        a = self.Word[:,0:LastCut].copy()
+        a = self.Word[:,0:(LastCut)].copy()
         HP = np.sum(a, axis=1)
+        VP = np.sum(self.Word[:,LastCut], axis=0)
+
         HP1 = np.sum(HP[0:self.BaseIndex])
         HP2 = np.sum(HP[self.BaseIndex+1:])
+        H = self.BaseIndex
         for i in range(self.BaseIndex):
             if HP[i] != 0:
                 H = i
                 break
 
+
+        #if self.IsStroke(LastCut//2,0) and VP != 0:
+        #    self.Regions.pop(Length - 1)
         # 0.2*HP2 <= HP1
-        if ( (self.BaseIndex- H) < 0.5 * (self.BaseIndex - self.height) ) and 0.7*HP2 <= HP1:
-            self.Regions.pop(Length-1)
+        # if ( (self.BaseIndex- H) < 0.5 * (self.BaseIndex - self.height) ) and VP != 0:#and 0.7*HP2 <= HP1:
+        #      self.Regions.pop(Length-1)
 
     def DetectCutPoints(self):
         # Flag = 0
