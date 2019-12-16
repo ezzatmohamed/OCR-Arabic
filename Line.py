@@ -37,7 +37,8 @@ class Line:
                     break
 
     def FilterGaps(self):
-        IQR = 2
+
+        IQR = 1 
 
         # Filtering Depending On IQR ( Interquartile Range ) Value
         # G => Gaps
@@ -46,8 +47,8 @@ class Line:
         self.L = self.L[self.L >= IQR] # Removing Gaps' Lengths
 
         Mean = np.mean(self.L)
-        self.G = self.G[self.L >= Mean]
-        self.L = self.L[self.L >= Mean]
+        self.G = self.G[self.L > Mean]
+        self.L = self.L[self.L > Mean]
 
     def FindGaps(self):
 

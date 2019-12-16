@@ -38,11 +38,12 @@ class Word:
             if self.Word[j][Cut] != self.Word[j - 1][Cut]:
                 Trans += 1
 
+
         if Trans > MaxVal:
             MaxVal = Trans
 
         Threshold = 2
-        if MaxVal >Threshold:
+        if MaxVal >=Threshold:
             self.Holes.append(Cut)
             return True
         return False
@@ -83,8 +84,7 @@ class Word:
         elif self.IsHole( Start, End, Cut):
             return False
         # TODO : Fix Connected-Path Algorithm
-        elif not self.IsPath(Start, End):
-           return True
+
 
 
         else:
@@ -198,6 +198,8 @@ class Word:
     def FilterStroke(self):
 
         #Filter Seeen
+        #TODO: Check No zero VP in the character 'س' , check it is not '7ah' using transitions
+
         i = -1
         Length = len(self.Regions)
         while ( i < Length-2 ):
@@ -390,3 +392,22 @@ class Word:
         h = self.Word.shape[1]
         for j in range(len(self.Regions)):
             self.WordRGB = cv2.rectangle(self.WordRGB, (self.Regions[j], 0), (self.Regions[j], h), (0, 255, 0), 1)
+
+    def GetChars(self):
+        Length = len(self.Regions)
+
+        Chars = []
+
+        Last = 0
+
+
+        for i in range(Length-1,-1,-1):
+            SegmentedChar = self.Word[:,Last:self.Regions[i]].copy()
+            Chars.append(SegmentedChar)
+            Last = self.Regions[i]
+
+        SegmentedChar = self.Word[:, Last:].copy()
+
+        Chars.append(SegmentedChar)
+
+        return Chars[::-1]

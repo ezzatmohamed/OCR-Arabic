@@ -88,16 +88,26 @@ class Segmentation:
             os.mkdir(Path + "/" + Name)
             cv2.imwrite(Path + '/' + Name + '/' + Name + '.jpg', L.GetBinaryL())
 
-            for i in range(len(Words)):
+            for i in range(len(Words)-1,-1,-1):
 
                 # For Debugging
-                if i == 5 and idx == 13:
+                if i == 4 and idx == 6:
                     print(1)
                 W = Word(Words[i], WordsRGB[i], MTI, MFV, BaseIndex, Height)
                 W.DetectCutPoints()
                 W.FilterStroke()
                 # W.FilterDal()
                 Cuts = W.GetCuts()
+
+                Chars = W.GetChars()
+
+                self.Result.append(Chars)
+
+
+                # for c in Chars:
+                #     cv2.imshow('Test Image', c)
+                #     cv2.waitKey(0)
+                #     cv2.destroyAllWindows()
 
                 # W.Display()
 
@@ -111,3 +121,6 @@ class Segmentation:
 
                 cv2.imwrite(Path + '/' + Name + '/word' + str(i) + '.jpg', WordsRGB[i])
 
+
+    def GetSegmentedWords(self):
+        return np.asarray(self.Result)
