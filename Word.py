@@ -34,11 +34,10 @@ class Word:
         a = self.Word[:, End:Start + 1].copy()
         MaxVal = 0
         Trans = 0
+
         for j in range(1, self.BaseIndex+1):
             if self.Word[j][Cut] != self.Word[j - 1][Cut]:
                 Trans += 1
-
-
         if Trans > MaxVal:
             MaxVal = Trans
 
@@ -84,7 +83,8 @@ class Word:
         elif self.IsHole( Start, End, Cut):
             return False
         # TODO : Fix Connected-Path Algorithm
-
+        elif not self.IsPath(Start,End):
+            return True
 
 
         else:
@@ -194,6 +194,42 @@ class Word:
 
         return True
 
+    def FilterDal(self):
+        # pass
+        Length = len(self.Regions)
+        i=0
+        while( i < Length-1 ):
+            Start = self.Regions[i]
+            End  = self.Regions[i+1]
+            Sum = np.sum(self.Word[:,End:Start]) // 255
+            if Sum <= 5:
+                self.Regions.pop(i)
+                Length-=1
+            else:
+                i+=1
+
+        if Length <= 0:
+            return
+        Start = self.Regions[Length - 1]
+
+        End =  0
+        Sum = np.sum(self.Word[:, End:Start]) // 255
+        if Sum <= 5:
+            self.Regions.pop(Length-1)
+            Length -= 1
+
+
+
+
+    def CheckPop(self,Cut):
+        VP = np.sum(self.Word, axis=0)
+        if VP[Cut] == 0:
+            return False
+
+        # if not self.IsPath((Start,End)):
+        #     return False
+        return True
+
 
     def FilterStroke(self):
 
@@ -223,16 +259,18 @@ class Word:
                 i+=1
                 continue
             if i ==  Length-3:
-                self.Regions.pop(i + 1)
-                self.Regions.pop(i + 1)
-                Length -= 2
+                if self.CheckPop(self.Regions[i+1]) and self.CheckPop(self.Regions[i+2]):
+                    self.Regions.pop(i + 1)
+                    self.Regions.pop(i + 1)
+                    Length -= 2
             else:
                 Start = self.Regions[i+2]
                 End   = self.Regions[i+3]
                 if self.IsStroke(Start, End):
-                    self.Regions.pop(i + 1)
-                    self.Regions.pop(i + 1)
-                    Length -= 2
+                    if self.CheckPop(self.Regions[i + 1]) and self.CheckPop(self.Regions[i + 2]):
+                        self.Regions.pop(i + 1)
+                        self.Regions.pop(i + 1)
+                        Length -= 2
             i+=1
 
         # Filtering Sheeen
@@ -264,9 +302,10 @@ class Word:
             Start = self.Regions[i + 1]
             End = self.Regions[i + 2]
             if  self.IsStrokeDots(Start, End):
-                self.Regions.pop(i + 1)
-                self.Regions.pop(i + 1)
-                Length -= 2
+                if self.CheckPop(self.Regions[i+1]) and self.CheckPop(self.Regions[i+2]):
+                    self.Regions.pop(i + 1)
+                    self.Regions.pop(i + 1)
+                    Length -= 2
 
             i += 1
 
@@ -287,8 +326,16 @@ class Word:
             Start = self.Regions[i+1]
             End = self.Regions[i+2]
             if self.IsStroke(Start,End):
-                self.Regions.pop(i+1)
-                Length-=1
+                if self.CheckPop(self.Regions[i+1]):
+
+                    HP4 =  np.sum(self.Word[:,End:Start+1],axis=1)
+                    h=0
+                    for k in range(len(HP4)):
+                        if HP4[k] !=0:
+                            h= self.BaseIndex - k
+                            break
+                    self.Regions.pop(i+1)
+                    Length-=1
 
 
 
@@ -374,7 +421,7 @@ class Word:
                 # if num == 2 or num == 4 or num == 7:
                 # s    cv2.imwrite('res' + str(num) + '.jpg', Word[:, End:Start+3])
                 if self.IsValidCut(Start - 1, End, Cut):
-                    self.Regions.append(Cut)
+                        self.Regions.append(Cut)
 
                 num += 1
                 # cv2.imshow('BaseLine', Word[:,End:Start+3] )

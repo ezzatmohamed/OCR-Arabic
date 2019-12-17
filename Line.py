@@ -27,14 +27,17 @@ class Line:
 
     def CalcHeight(self):
         HP = np.sum(self.L_Binary, axis=1)
+        Flag = 0
         for i in range(len(self.L_Binary)):
             if HP[i] != 0:
-                if HP[i] > 255*3:
-                    self.Height = i
-                    break
-                else:
-                    self.Height = i+4
-                    break
+                self.Height = i
+                break
+        # for i in range(len(self.L_Binary)-1,-1,-1):
+        #     if HP[i] != 0 and Flag == 0:
+        #         Flag = 1
+        #     elif Flag == 1 and HP[i] == 0:
+        #         self.Height = i
+        #         break
 
     def FilterGaps(self):
 
@@ -43,6 +46,13 @@ class Line:
         # Filtering Depending On IQR ( Interquartile Range ) Value
         # G => Gaps
         # L => Length of The Gap
+
+        TempG = self.G[0]
+        TempL = self.L[0]
+
+        self.G = np.delete(self.G,0)
+        self.L = np.delete(self.L,0)
+
         self.G = self.G[self.L >= IQR] # Removing Gaps Which its length < IQR
         self.L = self.L[self.L >= IQR] # Removing Gaps' Lengths
 
@@ -50,6 +60,8 @@ class Line:
         self.G = self.G[self.L > Mean]
         self.L = self.L[self.L > Mean]
 
+        self.G = np.insert(self.G, 0,TempG)
+        self.L = np.insert(self.L, 0,TempL)
     def FindGaps(self):
 
         # Vertical Projection Of the text
