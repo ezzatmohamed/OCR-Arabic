@@ -71,7 +71,7 @@ class Segmentation:
 
                 HP2 = np.sum(NewLine, axis=1)
                 Max = np.max(HP2)
-                if Max / 255 < 10:
+                if Max / 255 < 15:
                     continue
                 self.Bin_Lines.append(NewLine)
                 self.RGB_Lines.append(NewLineRGB)
@@ -126,7 +126,7 @@ class Segmentation:
             for i in range(len(Words)-1,-1,-1):
 
                 # For Debugging
-                if i == 9 and idx == 1:
+                if i == 11 and idx == 7:
                     print(1)
 
 
@@ -134,8 +134,8 @@ class Segmentation:
                 W.DetectCutPoints()
                 W.FilterDal()
                 W.FilterStroke()
+                W.FilterAtEnd()
                 Cuts = W.GetCuts()
-
                 Chars = W.GetChars()
 
                 self.Result.append(Chars)

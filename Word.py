@@ -20,7 +20,7 @@ class Word:
         self.Regions = []
         self.Holes = []
         self.height = height
-        #self.GetHeight()
+        # self.GetHeight()
 
     def GetHeight(self):
         WordHP = np.sum(self.Word, axis=1)
@@ -28,6 +28,7 @@ class Word:
             if WordHP[i] != 0:
                 self.height = self.BaseIndex - i
                 break
+
 
     def IsHole(self, Start, End, Cut):
 
@@ -42,7 +43,7 @@ class Word:
             MaxVal = Trans
 
         Threshold = 2
-        if MaxVal >=Threshold:
+        if MaxVal >= Threshold:
             self.Holes.append(Cut)
             return True
         return False
@@ -106,7 +107,6 @@ class Word:
                     return False
 
         return True
-
 
     def IsStroke(self, Start, End):
 
@@ -217,9 +217,6 @@ class Word:
         if Sum <= 5:
             self.Regions.pop(Length-1)
             Length -= 1
-
-
-
 
     def CheckPop(self,Cut):
         VP = np.sum(self.Word, axis=0)
@@ -334,8 +331,9 @@ class Word:
                         if HP4[k] !=0:
                             h= self.BaseIndex - k
                             break
-                    self.Regions.pop(i+1)
-                    Length-=1
+                    if h < 5 and ( (End-Start) < 6 ):
+                        self.Regions.pop(i+1)
+                        Length-=1
 
 
 
@@ -430,6 +428,39 @@ class Word:
 
                 Flag = 0
             # print(Regions)
+
+    def FilterAtEnd(self):
+        if len(self.Regions) < 1 :
+            return
+
+
+        CutCheck = self.Regions[-1]
+        VP = np.sum(self.Word[:, 0:CutCheck], axis=0)
+        End = self.Regions[-1]
+        for i in range(len(VP)):
+            if VP[i] != 0:
+                Start = i
+                break
+
+
+
+        HP = np.sum( self.Word[:,0:CutCheck] ,axis=1)
+
+
+
+        for i in range(len(HP)):
+            if HP[i] != 0:
+                TopLeft = self.BaseIndex-i
+                break
+        TopLine = self.BaseIndex - self.height
+
+
+
+        if (TopLeft <= 0.5 * TopLine) and ( np.sum(HP[0:self.BaseIndex]) > np.sum(HP[self.BaseIndex+1:]) ) and ( (End-Start) <8 ) :
+            if ( self.CheckPop(self.Regions[-1]) ):
+                self.Regions.pop(-1)
+
+
 
 
     def GetCuts(self):

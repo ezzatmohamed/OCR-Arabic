@@ -41,7 +41,7 @@ class Line:
 
     def FilterGaps(self):
 
-        IQR = 1 
+        IQR = 4
 
         # Filtering Depending On IQR ( Interquartile Range ) Value
         # G => Gaps
@@ -53,12 +53,13 @@ class Line:
         self.G = np.delete(self.G,0)
         self.L = np.delete(self.L,0)
 
-        self.G = self.G[self.L >= IQR] # Removing Gaps Which its length < IQR
-        self.L = self.L[self.L >= IQR] # Removing Gaps' Lengths
-
+        # self.G = self.G[self.L > IQR] # Removing Gaps Which its length < IQR
+        # self.L = self.L[self.L > IQR] # Removing Gaps' Lengths
+        #
+        
         Mean = np.mean(self.L)
-        self.G = self.G[self.L > Mean]
-        self.L = self.L[self.L > Mean]
+        self.G = self.G[self.L >= Mean]
+        self.L = self.L[self.L >= Mean]
 
         self.G = np.insert(self.G, 0,TempG)
         self.L = np.insert(self.L, 0,TempL)
