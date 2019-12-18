@@ -41,28 +41,28 @@ class Line:
 
     def FilterGaps(self):
 
-        IQR = 4
+        IQR = 3
 
         # Filtering Depending On IQR ( Interquartile Range ) Value
         # G => Gaps
         # L => Length of The Gap
-
-        TempG = self.G[0]
-        TempL = self.L[0]
-
-        self.G = np.delete(self.G,0)
-        self.L = np.delete(self.L,0)
-
-        # self.G = self.G[self.L > IQR] # Removing Gaps Which its length < IQR
-        # self.L = self.L[self.L > IQR] # Removing Gaps' Lengths
         #
-        
-        Mean = np.mean(self.L)
-        self.G = self.G[self.L >= Mean]
-        self.L = self.L[self.L >= Mean]
+        # TempG = self.G[0]
+        # TempL = self.L[0]
 
-        self.G = np.insert(self.G, 0,TempG)
-        self.L = np.insert(self.L, 0,TempL)
+        # self.G = np.delete(self.G,0)
+        # self.L = np.delete(self.L,0)
+        # #
+        self.G = self.G[self.L > IQR] # Removing Gaps Which its length < IQR
+        self.L = self.L[self.L > IQR] # Removing Gaps' Lengths
+        # # #
+        #
+        # Mean = np.mean(self.L)
+        # self.G = self.G[self.L >= Mean]
+        # self.L = self.L[self.L >= Mean]
+        #
+        # self.G = np.insert(self.G, 0,TempG)
+        # self.L = np.insert(self.L, 0,TempL)
     def FindGaps(self):
 
         # Vertical Projection Of the text

@@ -91,9 +91,9 @@ class Segmentation:
 
         # cv2.imshow('Test Image', self.Img)
         self.Img = self.CorrectSkew()
-        cv2.imshow('rotated Image', self.Img)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
+        # cv2.imshow('rotated Image', self.Img)
+        # cv2.waitKey(0)
+        # cv2.destroyAllWindows()
         dim = self.Img.shape
         self.ToBinaryImg()
         self.SegmentLines()
