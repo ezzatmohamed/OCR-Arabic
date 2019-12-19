@@ -15,7 +15,7 @@ def preprocess(img):
 
     # convert to binary image
     _, thresholded_img = cv2.threshold(blurred, 50, 255, cv2.THRESH_BINARY)
-    return thresholded_img
+    return thresholded_img/255
 
 
 def get_edges(img, sigma):
@@ -53,7 +53,7 @@ def get_white_pixels(img):
 
 
 def get_horizontal_transition(bin_img):
-    a = np.array(bin_img/255).astype(np.uint8)
+    a = np.array(bin_img).astype(np.uint8)
     count_bw = 0
     count_wb = 1
     for j in range(a.shape[0]):
@@ -66,7 +66,7 @@ def get_horizontal_transition(bin_img):
 
 
 def get_vertical_transition(bin_img):
-    a = np.array(bin_img/255).astype(np.uint8)
+    a = np.array(bin_img).astype(np.uint8)
     count_bw = 0
     count_wb = 0
     for j in range(a.shape[0]-1):
@@ -90,6 +90,7 @@ def divide_img(img):
 
 
 def get_regions_b_w_ratios(reg1, reg2, reg3, reg4):
+    ratios = []
     B1W1 = get_black_pixels(reg1)/get_white_pixels(reg1)
     B2W2 = get_black_pixels(reg2)/get_white_pixels(reg2)
     B3W3 = get_black_pixels(reg3)/get_white_pixels(reg3)
@@ -100,7 +101,8 @@ def get_regions_b_w_ratios(reg1, reg2, reg3, reg4):
     B2B4 = get_black_pixels(reg2)/get_black_pixels(reg4)
     B1B4 = get_black_pixels(reg1)/get_black_pixels(reg4)
     B2B3 = get_black_pixels(reg2)/get_black_pixels(reg3)
-    ratios = {
+    ratios.append([B1W1, B2W2, B3W3, B4W4, B1B2, B3B4, B1B3, B2B4, B1B4, B2B3])
+    ratios_dict = {
         "B1W1": B1W1,
         "B2W2": B2W2,
         "B3W3": B3W3,
@@ -114,14 +116,29 @@ def get_regions_b_w_ratios(reg1, reg2, reg3, reg4):
     }
     return ratios
 
+# Will add class num
+
+
+def extract_features(img):
+    features = []
+    bin_img = preprocess(img)
+    features.append(get_h_w_ratio(bin_img))
+    features.append(get_b_w_ratio(bin_img))
+    features.append(get_vertical_transition(bin_img))
+    features.append(get_horizontal_transition(bin_img))
+    r, t, z, l = divide_img(preprocess(Img))
+    features.append(get_regions_b_w_ratios(r, t, z, l))
+    return features
+
 
 Img = cv2.imread('D:/Senior2/Pattern/PatternRepo/OCR-Arabic/2.png')
-black_to_white, white_to_black = get_vertical_transition(preprocess(Img))
+#black_to_white, white_to_black = get_vertical_transition(preprocess(Img))
 #print(black_to_white, white_to_black)
-r, t, z, l = divide_img(preprocess(Img))
+#r, t, z, l = divide_img(preprocess(Img))
 #print(get_regions_b_w_ratios(r, t, z, l))
 # get_black_pixels(r) [0. 1.] [ 18 894]
 # get_b_w_ratio(preprocess(Img)/255)
 #cv2.imshow("Lol", Img)
+print(extract_features(Img))
 cv2.waitKey(0)
 cv2.destroyAllWindows()
