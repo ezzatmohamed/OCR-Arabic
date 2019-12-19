@@ -42,6 +42,16 @@ def get_b_w_ratio(bin_img):
     return counts[0] / counts[1]
 
 
+def get_black_pixels(img):
+    unique, counts = np.unique(img, return_counts=True)
+    return counts[0]
+
+
+def get_white_pixels(img):
+    unique, counts = np.unique(img, return_counts=True)
+    return counts[1]
+
+
 def get_horizontal_transition(bin_img):
     a = np.array(bin_img/255).astype(np.uint8)
     count_bw = 0
@@ -76,19 +86,42 @@ def divide_img(img):
     reg2 = img[int(size[0]/2):int(size[0]), 0:int(size[1]/2)]
     reg3 = img[0:int(size[0]/2), int(size[1]/2):int(size[1])]
     reg4 = img[int(size[0]/2):int(size[0]), int(size[1]/2):int(size[1])]
-    return reg1, reg2, reg3, reg4
+    return reg1/255, reg2/255, reg3/255, reg4/255
 
 
 def get_regions_b_w_ratios(reg1, reg2, reg3, reg4):
-
+    B1W1 = get_black_pixels(reg1)/get_white_pixels(reg1)
+    B2W2 = get_black_pixels(reg2)/get_white_pixels(reg2)
+    B3W3 = get_black_pixels(reg3)/get_white_pixels(reg3)
+    B4W4 = get_black_pixels(reg4)/get_white_pixels(reg4)
+    B1B2 = get_black_pixels(reg1)/get_black_pixels(reg2)
+    B3B4 = get_black_pixels(reg3)/get_black_pixels(reg4)
+    B1B3 = get_black_pixels(reg1)/get_black_pixels(reg3)
+    B2B4 = get_black_pixels(reg2)/get_black_pixels(reg4)
+    B1B4 = get_black_pixels(reg1)/get_black_pixels(reg4)
+    B2B3 = get_black_pixels(reg2)/get_black_pixels(reg3)
+    ratios = {
+        "B1W1": B1W1,
+        "B2W2": B2W2,
+        "B3W3": B3W3,
+        "B4W4": B4W4,
+        "B1B2": B1B2,
+        "B3B4": B3B4,
+        "B1B3": B1B3,
+        "B2B4": B2B4,
+        "B1B4": B1B4,
+        "B2B3": B2B3
+    }
     return ratios
 
 
 Img = cv2.imread('D:/Senior2/Pattern/PatternRepo/OCR-Arabic/2.png')
 black_to_white, white_to_black = get_vertical_transition(preprocess(Img))
-print(black_to_white, white_to_black)
-segment_img(preprocess(Img))
-
+#print(black_to_white, white_to_black)
+r, t, z, l = divide_img(preprocess(Img))
+#print(get_regions_b_w_ratios(r, t, z, l))
+# get_black_pixels(r) [0. 1.] [ 18 894]
+# get_b_w_ratio(preprocess(Img)/255)
 #cv2.imshow("Lol", Img)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
