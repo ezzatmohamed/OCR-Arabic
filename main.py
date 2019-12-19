@@ -1,5 +1,8 @@
 from Segmentation import *
 
+Dict = { "ا":0,"ب":1,"ت":2,"ث":3,"ج":4,"ح":5,"خ":6,"د":7,"ذ":8,"ر":9,"ز":10,"س":11,"ش":12,"ص":13,"ض":14,"ط":15,"ظ":16,"ع":17,"غ":18,"ف":19,"ق":20,"ك":21,"ل":22,"م":23,"ن":24,"و":25,"ه":26,"ي":27,"لا":29 }
+
+
 def Skew(Img):
     gray = cv2.cvtColor(Img, cv2.COLOR_BGR2GRAY)
     gray = cv2.bitwise_not(gray)
@@ -32,50 +35,68 @@ def WordLength(W):
             count+=1
     return count    
 
-# arr= [1,2,3,4,56,7,4,3,2,42,41]
-# blur = cv2.blur(arr,(5,5))
-
-# exit(0)
-
-TestNum = 1630
-Img = cv2.imread('csep'+str(TestNum)+'.png')
+def Train(NumberOfData):
 
 
-S = Segmentation(Img)
-S.Start()
+    ImgCount = 0
 
-# Words in a 2D-Array. Words is an array of Words, Each Word as an array of Characters
-# Words and Characters are arranged from (Right-To-Left)
-FileName = "csep"+str(TestNum)+".txt"
-File = open(FileName,"r")
-Lines = File.readlines()
+    AllLength = 0
+    AllCorrect = 0
+    count = 0
+
+    File = open("associtations.txt","w")
+    # exit(0)
+    for scanned in os.listdir('dataset/scanned'):
+
+        Path = 'dataset/scanned/'+scanned
+        print(Path)
+        Img = cv2.imread(Path)
+        S = Segmentation(Img)
+        try:
+            S.Start()
+        except:
+            print("Error in reading image")
+            continue
+
+        FileName = 'dataset/text/'+scanned[:-4] +'.txt'
+
+        File = open(FileName, "r")
+        Lines = File.readlines()
+        RealWords = Lines[0].split(" ")
+        Words = S.GetSegmentedWords()
+
+        Length = len(RealWords)
+        if Length != len(Words):
+            print("Error in Words")
+            continue
+
+        File = open("associtations.txt", "a")
+        Correct = 0
+        for i in range(Length):
+            WL = len(Words[i])
+            if WordLength(RealWords[i]) == WL :
+                Correct += 1
+                for j in range(WL):
+                    name = str(ImgCount)+".png"
+                    cv2.imwrite("train/"+name,Words[i][j])
+                    File.write(str(Dict[RealWords[i][j]])+" " + name+"\n" )
+                    ImgCount+=1
+
+        AllLength += Length
+        AllCorrect += Correct
+
+        count += 1
+        if count == NumberOfData:
+            break
+
+    File.close()
+    AllAccuracy = (AllCorrect / AllLength) * 100
+    print("Segmentation Finished")
+    print(str(count) + " Succesfull Images Out of " + str(1600 - 1559))
+    print("Testing on " + str(AllLength) + " Words ")
+    print(str(AllCorrect) + " Are Correct")
+    print("Accuracy : "+str(AllAccuracy) +"%")
 
 
-RealWords = Lines[0].split(" ")
-Words = S.GetSegmentedWords()
 
-# exit(0)
-Length = len(RealWords)
-
-if Length != len(Words):
-    print("Error in Words")
-    print(len(Lines))
-    print(Length)
-    print(len(Words))
-    exit(0)
-
-Correct = 0
-for i in range(Length):
-    # print(RealWords[i])
-    if WordLength(RealWords[i]) == len(Words[i]):
-        Correct+=1
-
-Accuracy = (Correct/Length)*100
-print("Correct: " + str(Correct))
-print("Errors: " + str(Length-Correct))
-print("Accuracy: "+str(Accuracy))
-# for w in Words:
-#     for c in w:
-#         cv2.imshow('Test Image', c)
-#         cv2.waitKey(0)
-#         cv2.destroyAllWindows()
+Train(1)

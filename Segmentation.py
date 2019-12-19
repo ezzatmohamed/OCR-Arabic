@@ -104,7 +104,7 @@ class Segmentation:
         for idx in range(len(self.Bin_Lines)):
 
             if idx == 31:
-                print(1)
+                # print(1)
                 pass
             L = Line(self.Bin_Lines[idx], self.RGB_Lines[idx])
             h = self.Bin_Lines[idx].shape[1]
@@ -127,7 +127,8 @@ class Segmentation:
 
                 # For Debugging
                 if i == 11 and idx == 7:
-                    print(1)
+                    # print(1)
+                    pass
 
 
                 W = Word(Words[i], WordsRGB[i], MTI, MFV, BaseIndex, Height)

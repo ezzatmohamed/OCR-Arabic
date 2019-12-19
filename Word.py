@@ -22,13 +22,6 @@ class Word:
         self.height = height
         # self.GetHeight()
 
-    def GetHeight(self):
-        WordHP = np.sum(self.Word, axis=1)
-        for i in range(len(WordHP)):
-            if WordHP[i] != 0:
-                self.height = self.BaseIndex - i
-                break
-
 
     def IsHole(self, Start, End, Cut):
 
