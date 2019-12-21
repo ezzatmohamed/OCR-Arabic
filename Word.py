@@ -28,7 +28,6 @@ class Word:
         a = self.Word[:, End:Start + 1].copy()
         MaxVal = 0
         Trans = 0
-
         for j in range(1, self.BaseIndex+1):
             if self.Word[j][Cut] != self.Word[j - 1][Cut]:
                 Trans += 1
@@ -56,10 +55,6 @@ class Word:
         for i in range(1, rows):
             if Mat[i][0] != 0:
                 IsReachable[i][0] = 1
-
-        # for j in range(1, cols):
-        #     if Mat[0][j] != 0:
-        #         IsReachable[0][j] = 1
 
         for i in range(1, rows):
             for j in range(1, cols):
@@ -121,7 +116,6 @@ class Word:
         # ratio = HP3 / (Start - End)
         # if ratio < 0.6:
         #     return False
-
         # WordHP = np.sum(self.Word,axis=1)
         # for i in range( len(WordHP) ):
         #     if WordHP[i] != 0:
@@ -148,7 +142,6 @@ class Word:
         if Trans > 2:
             return False
 
-
         return True
 
     def IsStrokeDots(self, Start, End):
@@ -165,12 +158,6 @@ class Word:
 
         if HP2 !=0:
             return False
-
-        # Stroke => It has a connected line in the baseline
-        # ratio = HP3 / (Start - End)
-        # if ratio < 0.6:
-        #     return False
-
 
         Trans = 0
         Flag = 0
@@ -420,7 +407,7 @@ class Word:
                 # cv2.destroyAllWindows()
 
                 Flag = 0
-            # print(Regions)
+                # print(Regions)
 
     def FilterAtEnd(self):
         if len(self.Regions) < 1 :

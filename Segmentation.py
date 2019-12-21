@@ -86,7 +86,7 @@ class Segmentation:
 
     def Start(self):
 
-        Path = self.CreateTestFolder()
+        # Path = self.CreateTestFolder()
 
 
         # cv2.imshow('Test Image', self.Img)
@@ -120,8 +120,8 @@ class Segmentation:
 
             Name = "Line_" + str(idx)
 
-            os.mkdir(Path + "/" + Name)
-            cv2.imwrite(Path + '/' + Name + '/' + Name + '.jpg', L.GetBinaryL())
+            # os.mkdir(Path + "/" + Name)
+            # cv2.imwrite(Path + '/' + Name + '/' + Name + '.jpg', L.GetBinaryL())
 
             for i in range(len(Words)-1,-1,-1):
 
@@ -161,7 +161,7 @@ class Segmentation:
                 WordsRGB[i] = cv2.rectangle(WordsRGB[i], (0, BaseIndex), (WordsRGB[i].shape[1], BaseIndex), (0, 255, 0),1)
                 WordsRGB[i] = cv2.rectangle(WordsRGB[i], (0, Height), (WordsRGB[i].shape[1], Height), (0, 255, 0), 1)
 
-                cv2.imwrite(Path + '/' + Name + '/word' + str(i) + '.jpg', WordsRGB[i])
+                # cv2.imwrite(Path + '/' + Name + '/word' + str(i) + '.jpg', WordsRGB[i])
 
 
     def GetSegmentedWords(self):
