@@ -95,8 +95,12 @@ def Train(NumberOfData):
                 Correct += 1
                 for j in range(WL):
                     name = str(ImgCount)+".png"
+                    Char = RealWords[i][j]
                     cv2.imwrite("train/"+name,Words[i][j])
-                    File.write(str(RealWords[i][j])+" " + name+"\n" )
+                    if j < WL-1:
+                        if (RealWords[i][j]+RealWords[i][j+1]) == "لا":
+                            Char +='ا'
+                    File.write(str(Dict[Char])+" " + name+"\n" )
                     ImgCount+=1
 
 
@@ -119,4 +123,4 @@ def Train(NumberOfData):
     print("Accuracy : "+str(AllAccuracy) +"%")
 
 
-Train(30)
+Train(4)
