@@ -4,4 +4,5 @@
 !/Word.py
 !/Segmentation.py
 !/FeatureExtraction.py
-
+!/NNClassifier.py
+!/Predictor.py

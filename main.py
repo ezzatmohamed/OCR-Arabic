@@ -33,10 +33,9 @@ def WordLength(W):
     for i in range(len(W)-1):
         if W[i]+W[i+1] != "لا":
             count+=1
-    return count    
+    return count
 
 def Train(NumberOfData):
-
 
     ImgCount = 0
 
@@ -54,23 +53,20 @@ def Train(NumberOfData):
 
     File = open("associtations.txt","w")
     # exit(0)
-    for scanned in os.listdir('dataset/scanned2'):
+    for scanned in os.listdir('dataset/scanned'):
 
-        Path = 'dataset/scanned2/'+scanned
+        Path = 'dataset/scanned/'+scanned
         # Path2 = 'dataset/scanned2/'+scanned
         print(Path)
         Img = cv2.imread(Path)
-        # Img2 = cv2.imread(Path2)
         S = Segmentation(Img)
-        # S2 = Segmentation(Img2)
         try:
             S.Start()
-            # S2.Start()
         except:
             print("Error in reading image")
             continue
 
-        FileName = 'dataset/text2/'+scanned[:-4] +'.txt'
+        FileName = 'dataset/text/'+scanned[:-4] +'.txt'
         print(FileName)
 
         File = open(FileName, "r")
@@ -78,14 +74,11 @@ def Train(NumberOfData):
         RealWords = Lines[0].split(" ")
         Words = S.GetSegmentedWords()
 
-        # Words2 = S2.GetSegmentedWords()
-
         Length = len(RealWords)
         print("================================")
         print(Length)
         print(len(Words))
         # print(len(Words2))
-        print("================================")
 
         if Length != len(Words):
             print("Error in Words")
@@ -103,9 +96,13 @@ def Train(NumberOfData):
                 for j in range(WL):
                     name = str(ImgCount)+".png"
                     cv2.imwrite("train/"+name,Words[i][j])
-                    File.write(str(Dict[RealWords[i][j]])+" " + name+"\n" )
+                    File.write(str(RealWords[i][j])+" " + name+"\n" )
                     ImgCount+=1
 
+
+        print(str((Correct/Length)*100)+"%")
+
+        print("================================")
         AllLength += Length
         AllCorrect += Correct
 
@@ -122,27 +119,4 @@ def Train(NumberOfData):
     print("Accuracy : "+str(AllAccuracy) +"%")
 
 
-#
-#
-# Path = 'dataset/scanned2/capr6.png'
-# Img = cv2.imread(Path)
-# S = Segmentation(Img)
-# try:
-#     S.Start()
-# except:
-#     print("Error in reading image")
-#
-#
-# FileName = 'dataset/text/capr6.txt'
-#
-# File = open(FileName, "r")
-# Lines = File.readlines()
-# RealWords = Lines[0].split(" ")
-# Words = S.GetSegmentedWords()
-#
-# Length = len(RealWords)
-# print("================================")
-# print(Length)
-# print(len(Words))
-# print("================================")
-Train(20)
+Train(30)

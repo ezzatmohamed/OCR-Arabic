@@ -130,15 +130,15 @@ def extract_features(img):
     features.append(get_regions_b_w_ratios(r, t, z, l))
     return features
 
-
-Img = cv2.imread('D:/Senior2/Pattern/PatternRepo/OCR-Arabic/2.png')
-#black_to_white, white_to_black = get_vertical_transition(preprocess(Img))
-#print(black_to_white, white_to_black)
-#r, t, z, l = divide_img(preprocess(Img))
-#print(get_regions_b_w_ratios(r, t, z, l))
-# get_black_pixels(r) [0. 1.] [ 18 894]
-# get_b_w_ratio(preprocess(Img)/255)
-#cv2.imshow("Lol", Img)
-print(extract_features(Img))
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+#
+# Img = cv2.imread('D:/Senior2/Pattern/PatternRepo/OCR-Arabic/2.png')
+# #black_to_white, white_to_black = get_vertical_transition(preprocess(Img))
+# #print(black_to_white, white_to_black)
+# #r, t, z, l = divide_img(preprocess(Img))
+# #print(get_regions_b_w_ratios(r, t, z, l))
+# # get_black_pixels(r) [0. 1.] [ 18 894]
+# # get_b_w_ratio(preprocess(Img)/255)
+# #cv2.imshow("Lol", Img)
+# print(extract_features(Img))
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
